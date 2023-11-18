@@ -49,3 +49,6 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+
+# only used for testing
+main.py
