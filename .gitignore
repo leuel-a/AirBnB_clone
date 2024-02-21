@@ -52,3 +52,8 @@ wheels/
 
 # only used for testing
 main.py
+
+# Pyhon byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
