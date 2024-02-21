@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Defines the TestBaseModel class"""
 import unittest
+import datetime
 
 from models.base_model import BaseModel
 
@@ -25,6 +26,21 @@ class TestBaseModel(unittest.TestCase):
         expected_value = f"[{class_name}] ({id}) {dict_rep}"
 
         self.assertEqual(str(self.test_base_model), expected_value)
+
+    def test_to_dict_method(self):
+        """Test the to_dict method of the BaseModel class."""
+        dict_s = self.test_base_model.to_dict()
+
+        for key, value in self.test_base_model.__dict__.items():
+            self.assertTrue(dict_s.get(key, None) is not None)
+            
+            if isinstance(value, datetime):
+                self.assertEquals(dict_s[key], value.isoformat())
+
+        self.assertTrue(dict_s.get("__class__", None) is not None)
+        self.asserttrue(
+            dict_s.get("__class__", None), self.test_base_model.__class__.__name__
+        )
 
 
 if __name__ == "__main__":
