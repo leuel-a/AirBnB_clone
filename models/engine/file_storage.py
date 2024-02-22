@@ -2,7 +2,7 @@
 """Defines the FileStorage class"""
 import json
 
-from models.base_model import BaseModel
+from ..base_model import BaseModel
 
 classes = {"BaseModel": BaseModel}
 
@@ -24,7 +24,7 @@ class FileStorage:
 
     def new(self, obj):
         """Sets in __objects the obj with key <obj class name>.id"""
-        key = f"{str(type(obj))}.id"
+        key = f"{obj.__class__.__name__}.{obj.id}"
         self.__objects[key] = obj
 
     def save(self):
@@ -39,9 +39,12 @@ class FileStorage:
 
     def reload(self):
         """Deserializes the JSON file to __objects"""
-        with open(self.__file_path, "r") as file:
-            dict_objects = json.load(file)
+        try:
+            with open(self.__file_path, "r") as file:
+                dict_objects = json.load(file)
 
-        for key, value in dict_objects.items():
-            obj_class = value["__class__"]
-            self.__objects[key] = classes[obj_class](value)
+            for key, value in dict_objects.items():
+                obj_class = value["__class__"]
+                self.__objects[key] = classes[obj_class](**value)
+        except:
+            pass
