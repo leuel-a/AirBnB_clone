@@ -38,7 +38,7 @@ class TestBaseModel(unittest.TestCase):
             self.assertTrue(dict_s.get(key, None) is not None)
 
             if isinstance(value, datetime):
-                self.assertEquals(dict_s[key], value.isoformat())
+                self.assertEqual(dict_s[key], value.isoformat())
 
         self.assertTrue(dict_s.get("__class__", None) is not None)
         self.assertTrue(dict_s.get("__class__", None), "BaseModel")
