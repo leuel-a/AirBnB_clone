@@ -52,6 +52,7 @@ wheels/
 
 # only used for testing
 main.py
+test.json
 
 # Pyhon byte-compiled / optimized files
 __pycache__/
