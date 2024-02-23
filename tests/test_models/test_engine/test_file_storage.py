@@ -14,7 +14,8 @@ class TestFileStorage(unittest.TestCase):
 
     Attributes:
         mock_storage (FileStorage): A mock instance of FileStorage for testing.
-        prev_file_name (str): The original file path of FileStorage before testing.
+        prev_file_name (str): The original file path of FileStorage before
+                                testing.
     """
 
     def setUp(self) -> None:
@@ -30,7 +31,7 @@ class TestFileStorage(unittest.TestCase):
     def tearDown(self) -> None:
         """Restores the original test environment.
 
-        Reverts the _FileStorage__file_path attribute back to its original value.
+        Reverts the _FileStorage__file_path attribute back to original value.
         """
         FileStorage._FileStorage__file_path = self.prev_file_name
 

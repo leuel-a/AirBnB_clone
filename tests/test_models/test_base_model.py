@@ -10,15 +10,18 @@ class TestBaseModel(unittest.TestCase):
     """A unit test class for the BaseModel class.
 
     Attributes:
-        test_base_model (BaseModel): An instance of the BaseModel class for testing.
+        test_base_model (BaseModel): An instance of the BaseModel
+        class for testing.
     """
 
     def setUp(self) -> None:
-        """Sets up the test environment before each test method is run."""
+        """Sets up the test environment before each test method
+        is run."""
         self.test_base_model = BaseModel()
 
     def test_string_representation_of_instance(self):
-        """Tests the string representation of the BaseModel instance."""
+        """Tests the string representation of the BaseModel
+        instance."""
         class_name = self.test_base_model.__class__.__name__
         id = self.test_base_model.id
         dict_rep = self.test_base_model.__dict__
@@ -33,14 +36,12 @@ class TestBaseModel(unittest.TestCase):
 
         for key, value in self.test_base_model.__dict__.items():
             self.assertTrue(dict_s.get(key, None) is not None)
-            
+
             if isinstance(value, datetime):
                 self.assertEquals(dict_s[key], value.isoformat())
 
         self.assertTrue(dict_s.get("__class__", None) is not None)
-        self.assertTrue(
-            dict_s.get("__class__", None), self.test_base_model.__class__.__name__
-        )
+        self.assertTrue(dict_s.get("__class__", None), "BaseModel")
 
 
 if __name__ == "__main__":
