@@ -8,7 +8,8 @@ classes = {"BaseModel": BaseModel}
 
 
 class FileStorage:
-    """A class that serializes instances to a JSON file and deserializes JSON file to instances.
+    """A class that serializes instances to a JSON file and
+    deserializes JSON file to instances.
 
     Attributes:
         __file_path (str): The path to the JSON file.
@@ -46,5 +47,5 @@ class FileStorage:
             for key, value in dict_objects.items():
                 obj_class = value["__class__"]
                 self.__objects[key] = classes[obj_class](**value)
-        except:
+        except FileNotFoundError:
             pass
