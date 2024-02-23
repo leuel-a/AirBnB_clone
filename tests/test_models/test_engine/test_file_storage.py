@@ -14,8 +14,10 @@ class TestFileStorage(unittest.TestCase):
     """A class used to test the FileStorage class.
 
     Attributes:
-        prev_file_name (str): The previous file name of the FileStorage instance.
-        prev_objects (dict): A copy of the previous objects of the FileStorage instance.
+        prev_file_name (str): The previous file name of the FileStorage
+        instance.
+        prev_objects (dict): A copy of the previous objects of the FileStorage
+        instance.
     """
 
     def setUp(self) -> None:
