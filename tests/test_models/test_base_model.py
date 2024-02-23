@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Defines the TestBaseModel class"""
 import unittest
-import datetime
+from datetime import datetime
 
 from models.base_model import BaseModel
 
@@ -38,7 +38,7 @@ class TestBaseModel(unittest.TestCase):
                 self.assertEquals(dict_s[key], value.isoformat())
 
         self.assertTrue(dict_s.get("__class__", None) is not None)
-        self.asserttrue(
+        self.assertTrue(
             dict_s.get("__class__", None), self.test_base_model.__class__.__name__
         )
 
