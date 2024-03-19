@@ -3,6 +3,7 @@
 import unittest
 from datetime import datetime
 
+from models import storage
 from models.base_model import BaseModel
 
 
@@ -42,6 +43,11 @@ class TestBaseModel(unittest.TestCase):
 
         self.assertTrue(dict_s.get("__class__", None) is not None)
         self.assertTrue(dict_s.get("__class__", None), "BaseModel")
+
+    def test_new_base_model_added_to_storage(self):
+        """Tests that a new BaseModel instance is added to the storage dictionary"""
+        key = f"BaseModel.{self.test_base_model.id}"
+        self.assertIn(key, storage.all())
 
 
 if __name__ == "__main__":
