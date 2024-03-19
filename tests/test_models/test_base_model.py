@@ -1,7 +1,11 @@
 #!/usr/bin/python3
 """Defines the TestBaseModel class"""
+import json
 import unittest
 from datetime import datetime
+
+# TODO: Remove this import statement, only for testing purposes
+from typing import Dict
 
 from models import storage
 from models.base_model import BaseModel
@@ -48,6 +52,16 @@ class TestBaseModel(unittest.TestCase):
         """Tests that a new BaseModel instance is added to the storage dictionary"""
         key = f"BaseModel.{self.test_base_model.id}"
         self.assertIn(key, storage.all())
+
+    def test_save_base_model_to_storage(self):
+        """Tests that a BaseModel instance is saved to storage when it is updated"""
+        key = f"BaseModel.{self.test_base_model.id}"
+        self.test_base_model.save()
+
+        with open(storage._FileStorage__file_path, "r") as file:
+            json_objects = json.load(file)
+            self.assertTrue(json_objects.get(key, None) is not None)
+            self.assertEqual(json_objects[key], self.test_base_model.to_dict())
 
 
 if __name__ == "__main__":
