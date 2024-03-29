@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Console for the AirBnB clone project"""
 import cmd
+from typing import List, Dict, Union
 
 from models import storage
 from models.base_model import BaseModel
@@ -31,25 +32,38 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, line: str) -> bool:
         """Creates a new instance"""
-        input_class = line.split(" ")[0] if len(line) != 0 else None
-        if input_class is None:
+        tokens = HBNBCommand.parse_tokens(line)
+
+        cls_name, *_ = tokens
+        if not cls_name:
             print("** class name missing **")
             return False
 
-        if input_class not in classes:
+        if cls_name not in classes:
             print("** class doesn't exist **")
             return False
 
-        new_obj = classes[input_class]()
+        new_obj = classes[cls_name]()
         storage.save()
         print(new_obj.id)
 
     def do_show(self, line: str) -> bool:
         """Shows the string representation of an instance"""
-        key = HBNBCommand.checkValidInput(line)
-        if key == "":
+        cls_name, ins_id, *_ = HBNBCommand.parse_tokens(line)
+
+        if not cls_name:
+            print("** class name missing **")
             return False
 
+        if cls_name not in classes:
+            print("** class doesn't exist **")
+            return False
+
+        if not ins_id:
+            print("** instance id missing **")
+            return False
+
+        key = f"{cls_name}.{ins_id}"
         if key not in storage.all():
             print("** no instance found **")
             return False
@@ -58,8 +72,23 @@ class HBNBCommand(cmd.Cmd):
 
     def do_destroy(self, line: str) -> bool:
         """Deletes an instance based on the class name and id"""
-        key = HBNBCommand.checkValidInput(line)
-        if key == "":
+        cls_name, ins_id, *_ = HBNBCommand.parse_tokens(line)
+
+        if not cls_name:
+            print("** class name missing **")
+            return False
+
+        if cls_name not in classes:
+            print("** class doesn't exist **")
+            return False
+
+        if not ins_id:
+            print("** instance id missing **")
+            return False
+
+        key = f"{cls_name}.{ins_id}"
+        if key not in storage.all():
+            print("** no instance found **")
             return False
 
         del storage.all()[key]
@@ -67,68 +96,84 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, line: str) -> bool:
         """Gets all instances from storage"""
-        items = [str(item) for item in storage.all().values()]
+        cls_name, *_ = HBNBCommand.parse_tokens(line)
+        if cls_name is not None and cls_name not in classes:
+            print("** class doesn't exist **")
+            return False
 
-        input_class_name = line.split(" ")[0] if line else ""
-        if input_class_name != "":
-            if input_class_name not in classes:
-                print("** class doesn't exist **")
-                return False
-            items = []
-            for key, value in storage.all().items():
-                class_name, _ = key.split(".")
-                if class_name == input_class_name:
-                    items.append(str(value))
+        items = []
+        for key, value in storage.all().items():
+            obj_class, _ = key.split(".")
+
+            if cls_name is not None and cls_name != obj_class:
+                continue
+
+            items.append(str(value))
         print(items)
 
     def do_update(self, line: str) -> bool:
-        key = HBNBCommand.checkValidInput(line)
-        if key == "":
+        cls_name, ins_id, attr_name, attr_value = HBNBCommand.parse_tokens(line)
+
+        if not cls_name:
+            print("** class name missing **")
             return False
 
-        input_list = line.split(" ")[2:]
-        if len(input_list) == 0:
+        if cls_name not in classes:
+            print("** class doesn't exist **")
+            return False
+
+        if not ins_id:
+            print("** instance id missing **")
+            return False
+
+        key = f"{cls_name}.{ins_id}"
+        if key not in storage.all():
+            print("** no instance found **")
+            return False
+
+        if not attr_name:
             print("** attribute name missing **")
             return False
 
-        if len(input_list) == 1:
+        if not attr_value:
             print("** value missing **")
             return False
 
-        name, value = input_list[:2]
+        if "." in attr_value:
+            attr_value = float(attr_value)
+        elif attr_value.isdigit():
+            attr_value = int(attr_value)
 
-        value = value[1:-1]  # Remove the quotes
-        if "." in value:
-            value = float(value)
-        elif value.isdigit():
-            value = int(value)
-
-        setattr(storage.all()[key], name, value)
+        setattr(storage.all()[key], attr_name, attr_value)
         storage.save()
 
     @staticmethod
-    def checkValidInput(line: str) -> str:
-        input_list = line.split(" ") if len(line) != 0 else None
+    def parse_tokens(input: str) -> List[Union[str, None]]:
+        tokens = [None for _ in range(4)]
+        token_idx = 0
 
-        if input_list is None:
-            print("** class name missing **")
-            return ""
+        i = j = 0
+        while i < len(input) and token_idx != 4:
+            j = i + 1
 
-        if input_list[0] not in classes:
-            print("** class doesn't exist **")
-            return ""
+            if input[i] == " ":
+                i += 1
+                continue
 
-        if len(input_list) == 1:
-            print("** insance id missing **")
-            return ""
+            if input[i] == '"':
+                while j < len(input) and input[j] != '"':
+                    j += 1
 
-        input_class, input_instance_id = input_list[:2]
-        key = f"{input_class}.{input_instance_id}"
+                if (j + 1 < len(input) and input[j + 1] == " ") or j == len(input) - 1:
+                    tokens[token_idx] = input[i + 1 : j]
+            else:
+                while j < len(input) and input[j] != " ":
+                    j += 1
+                tokens[token_idx] = input[i:j]
 
-        if key not in storage.all():
-            print("** no instance found **")
-            return ""
-        return key
+            token_idx += 1
+            i = j + 1
+        return tokens
 
 
 if __name__ == "__main__":
