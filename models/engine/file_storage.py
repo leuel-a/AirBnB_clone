@@ -3,8 +3,9 @@
 import json
 
 from ..base_model import BaseModel
+from ..user import User
 
-classes = {"BaseModel": BaseModel}
+classes = {"BaseModel": BaseModel, "User": User}
 
 
 class FileStorage:

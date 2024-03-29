@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 """Console for the AirBnB clone project"""
 import cmd
-from typing import List, Dict, Union
+from typing import List, Union
 
 from models import storage
 from models.base_model import BaseModel
+from models.user import User
 
-classes = {"BaseModel": BaseModel}
+classes = {"BaseModel": BaseModel, "User": User}
 
 
 class HBNBCommand(cmd.Cmd):
@@ -112,6 +113,8 @@ class HBNBCommand(cmd.Cmd):
         print(items)
 
     def do_update(self, line: str) -> bool:
+        """Updates an instance based on the class name and id by adding
+        or updating attribute"""
         cls_name, ins_id, attr_name, attr_value = HBNBCommand.parse_tokens(line)
 
         if not cls_name:
@@ -149,6 +152,7 @@ class HBNBCommand(cmd.Cmd):
 
     @staticmethod
     def parse_tokens(input: str) -> List[Union[str, None]]:
+        """Parses input string into tokens separated by spaces"""
         tokens = [None for _ in range(4)]
         token_idx = 0
 
