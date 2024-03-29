@@ -74,11 +74,11 @@ class HBNBCommand(cmd.Cmd):
             if input_class_name not in classes:
                 print("** class doesn't exist **")
                 return False
-            items = [
-                str(item)
-                for item in storage.all().values()
-                if item.__class__.__name__ == input_class_name
-            ]
+            items = []
+            for key, value in storage.all().items():
+                class_name, _ = key.split(".")
+                if class_name == input_class_name:
+                    items.append(str(value))
         print(items)
 
     def do_update(self, line: str) -> bool:
