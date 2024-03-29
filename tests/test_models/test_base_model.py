@@ -32,7 +32,6 @@ class TestBaseModel(unittest.TestCase):
         dict_rep = self.test_base_model.__dict__
 
         expected_value = f"[{class_name}] ({id}) {dict_rep}"
-
         self.assertEqual(str(self.test_base_model), expected_value)
 
     def test_to_dict_method(self):
@@ -49,12 +48,14 @@ class TestBaseModel(unittest.TestCase):
         self.assertTrue(dict_s.get("__class__", None), "BaseModel")
 
     def test_new_base_model_added_to_storage(self):
-        """Tests that a new BaseModel instance is added to the storage dictionary"""
+        """Tests that a new BaseModel instance is added to
+        the storage dictionary"""
         key = f"BaseModel.{self.test_base_model.id}"
         self.assertIn(key, storage.all())
 
     def test_save_base_model_to_storage(self):
-        """Tests that a BaseModel instance is saved to storage when it is updated"""
+        """Tests that a BaseModel instance is saved to storage
+        when it is updated"""
         key = f"BaseModel.{self.test_base_model.id}"
         self.test_base_model.save()
 
