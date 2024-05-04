@@ -4,9 +4,6 @@ import json
 import unittest
 from datetime import datetime
 
-# TODO: Remove this import statement, only for testing purposes
-from typing import Dict
-
 from models import storage
 from models.base_model import BaseModel
 
