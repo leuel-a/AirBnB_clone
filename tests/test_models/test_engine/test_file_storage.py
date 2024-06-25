@@ -47,9 +47,14 @@ class TestFileStorage(unittest.TestCase):
         obj1 = BaseModel()
         obj2 = BaseModel()
 
+        usr1 = User()
+        usr2 = User()
+
         expected = {
             f"{obj1.__class__.__name__}.{obj1.id}": obj1,
             f"{obj2.__class__.__name__}.{obj2.id}": obj2,
+            f"{usr1.__class__.__name__}.{usr1.id}": usr1,
+            f"{usr2.__class__.__name__}.{usr2.id}": usr2,
         }
 
         self.assertDictEqual(storage.all(), expected)
